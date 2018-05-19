@@ -67,26 +67,8 @@
      * @param {element} $checkoutStageAction
      */
     Checkout.handlePaymentCheckoutStageSubmission = function($checkoutStageAction) {
-        var $paymentStage = $checkoutStageAction.closest('.js-checkoutStage');
-
-        var paymentMethod = getPaymentMethod();
-        if ('CreditCard' === paymentMethod) {
-            if (shouldSaveNewPayment() || shouldUseCustomerPayment()) {
-                savePaymentInfo($paymentStage)
-            } else {
-                // If we are not saving the payment method, then the payment data will be converted into a nonce.
-                // Therefore, we want to avoid tokenizing the credit card data until the checkout is submitted
-                // in the review stage. In the meantime, we can save the billing address.
-                saveBillingAddressOnly($paymentStage)
-            }
-        } else if ('COD' === paymentMethod) {
-            advanceFromPaymentToReviewStage();
-            showReadOnlyPaymentMethod(paymentMethod);
-        } else if ('PayPal' === paymentMethod) {
-            if (isPayPalConfigComplete()) {
-                collectPaymentInfoViaPayPal();
-            }
-        }
+        advanceFromPaymentToReviewStage();
+        showReadOnlyPaymentMethod('COD');
     };
 
     /**
